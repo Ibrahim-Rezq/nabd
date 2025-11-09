@@ -1,7 +1,7 @@
-# 🕌 Nobd (نَبْض) – Muslim Routine Tracker
+# 🕌 Nabd (نَبْض) – Muslim Routine Tracker
 
 > _"Reflect daily, improve consistently."_  
-> **Nobd** (نَبْض) is a serene, minimal web application designed to help Muslims maintain balance and consistency in their worship (`ʿibādāt`) and worldly (`dunyā`) habits.
+> **Nabd** (نَبْض) is a serene, minimal web application designed to help Muslims maintain balance and consistency in their worship (`ʿibādāt`) and worldly (`dunyā`) habits.
 
 It allows you to track your daily prayers, remembrance, good deeds, and productive routines — encouraging self-reflection and mindful improvement.
 
@@ -9,7 +9,7 @@ It allows you to track your daily prayers, remembrance, good deeds, and producti
 
 ## 🌟 Overview
 
-**Nobd** is a Muslim routine tracker that visualizes your spiritual and personal progress across four main categories:
+**Nabd** is a Muslim routine tracker that visualizes your spiritual and personal progress across four main categories:
 
 | Category                  | Description                                                           |
 | ------------------------- | --------------------------------------------------------------------- |
@@ -28,7 +28,7 @@ Each activity has a three-state tracking system:
 
 ## 🗺️ Roadmap (MVP Phases Overview)
 
-Nobd will evolve through several **MVP stages**, each expanding on functionality while maintaining simplicity.  
+Nabd will evolve through several **MVP stages**, each expanding on functionality while maintaining simplicity.  
 This roadmap outlines the _conceptual development path_ — not specific technical tasks.
 
 ---
@@ -124,7 +124,7 @@ This roadmap outlines the _conceptual development path_ — not specific technic
 
 ## 🧭 Vision
 
-> **Nobd** aims to help Muslims stay consistent, reflective, and intentional — using modern tools to nurture timeless faith and discipline.
+> **Nabd** aims to help Muslims stay consistent, reflective, and intentional — using modern tools to nurture timeless faith and discipline.
 
 The goal is not just productivity, but balance:
 
