@@ -55,7 +55,7 @@ components render in-palette.
 | `--gold` / `destructive`              | `text-gold`              | `#C79A3A`                     |
 | `--gold-soft`                         | `bg-gold-soft`           | `#FBF3DF`                     |
 | `foreground` (ink)                    | `text-foreground`        | `#0E3234`                     |
-| `--muted-foreground`                  | `text-muted-foreground`  | `#5C8582` (Modern: `#7BA09D`) |
+| `--muted-foreground`                  | `text-muted-foreground`  | `#4A706D` (Modern: `#4D7875`) |
 | `--faint`                             | `text-faint`             | `#9BBEBB`                     |
 | `--on-primary` / `primary-foreground` | `text-on-primary`        | `#EAF2F0`                     |
 | `accent-foreground`                   | `text-accent-foreground` | `#0E3234`                     |
