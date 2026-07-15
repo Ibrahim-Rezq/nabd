@@ -29,4 +29,6 @@ export async function completeOnboarding(
   await ensureChecked(page, `onboarding-adhkar-${optionIds.adhkar}`)
   await page.getByTestId('onboarding-submit').click()
   await page.getByTestId('onboarding-confirm').click()
+  // Permissions step (NBD-28): skip both permissions and start the wird.
+  await page.getByTestId('onboarding-finish').click()
 }
