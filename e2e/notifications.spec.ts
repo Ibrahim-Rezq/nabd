@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { completeOnboarding } from './helpers'
+import { answerQuestionnaire, completeOnboarding, ensureChecked } from './helpers'
 
 // NBD-28: onboarding's permissions step captures notification preferences (three moment
 // toggles with fixed iqamah offsets); the choice persists on the device.
@@ -19,17 +19,10 @@ test('opting in to notifications persists the chosen moments', async ({ page }) 
   })
   await page.goto('/')
 
-  // Walk the questionnaire manually up to the permissions step.
-  await page.getByTestId('onboarding-prayers-mostly').check()
-  await page.getByTestId('onboarding-quran-pages').check()
-  await page.getByTestId('onboarding-adhkar-sometimes').check()
-  await page.getByTestId('onboarding-submit').click()
-  await page.getByTestId('onboarding-confirm').click()
+  await answerQuestionnaire(page)
 
-  await expect(page.getByTestId('onboarding-permissions')).toBeVisible()
-
-  // Enable notifications (permission pre-granted) and drop the iqamah moment.
-  await page.getByTestId('onboarding-notifications').check()
+  // Enable notifications (permission stubbed granted) and drop the iqamah moment.
+  await ensureChecked(page, 'onboarding-notifications')
   await expect(page.getByTestId('onboarding-moment-atIqamah')).toBeVisible()
   await page.getByTestId('onboarding-moment-atIqamah').uncheck()
   await page.getByTestId('onboarding-finish').click()
