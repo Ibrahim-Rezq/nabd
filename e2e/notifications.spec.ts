@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { answerQuestionnaire, completeOnboarding, ensureChecked, finishOnboarding } from './helpers'
+import { answerQuestionnaire, completeOnboarding, finishOnboarding } from './helpers'
 
 // NBD-28: onboarding's permissions step captures notification preferences (three moment
 // toggles with fixed iqamah offsets); the choice persists on the device.
@@ -21,9 +21,13 @@ test('opting in to notifications persists the chosen moments', async ({ page }) 
 
   await answerQuestionnaire(page)
 
-  // Enable notifications (permission stubbed granted) and drop the iqamah moment.
-  await ensureChecked(page, 'onboarding-notifications')
-  await expect(page.getByTestId('onboarding-moment-atIqamah')).toBeVisible()
+  // Enable notifications (permission stubbed granted) and drop the iqamah moment. Retried
+  // as a unit: only the moments block proves React took the toggle (a pre-hydration click
+  // can set the DOM checkbox without it).
+  await expect(async () => {
+    await page.getByTestId('onboarding-notifications').click()
+    await expect(page.getByTestId('onboarding-moment-atIqamah')).toBeVisible({ timeout: 2000 })
+  }).toPass({ timeout: 20_000 })
   await page.getByTestId('onboarding-moment-atIqamah').uncheck()
   await finishOnboarding(page)
 
