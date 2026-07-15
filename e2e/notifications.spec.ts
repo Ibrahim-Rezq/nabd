@@ -28,7 +28,14 @@ test('opting in to notifications persists the chosen moments', async ({ page }) 
     await page.getByTestId('onboarding-notifications').click()
     await expect(page.getByTestId('onboarding-moment-atIqamah')).toBeVisible({ timeout: 2000 })
   }).toPass({ timeout: 20_000 })
-  await page.getByTestId('onboarding-moment-atIqamah').uncheck()
+  // Center it first — near the page bottom it can sit under the fixed navbar on CI's
+  // viewport, and uncheck() then waits forever on actionability.
+  const iqamah = page.getByTestId('onboarding-moment-atIqamah')
+  await expect(async () => {
+    await iqamah.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+    await iqamah.uncheck({ timeout: 2000 })
+    expect(await iqamah.isChecked()).toBe(false)
+  }).toPass({ timeout: 20_000 })
   await finishOnboarding(page)
 
   const prefs = await page.evaluate(() =>
