@@ -27,6 +27,8 @@ export async function answerQuestionnaire(
   page: Page,
   optionIds: OnboardingAnswers = DEFAULT_ANSWERS,
 ): Promise<void> {
+  // Welcome/purpose screen first (NBD-30).
+  await page.getByTestId('onboarding-begin').click()
   await ensureChecked(page, `onboarding-prayers-${optionIds.prayers}`)
   await ensureChecked(page, `onboarding-quran-${optionIds.quran}`)
   await ensureChecked(page, `onboarding-adhkar-${optionIds.adhkar}`)
