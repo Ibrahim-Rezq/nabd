@@ -51,8 +51,12 @@ export async function completeOnboarding(
 // (double-submit safe), so a swallowed click or a slow Dexie flip on a loaded CI runner just
 // clicks again instead of failing the spec.
 export async function finishOnboarding(page: Page): Promise<void> {
+  const finish = page.getByTestId('onboarding-finish')
   await expect(async () => {
-    await page.getByTestId('onboarding-finish').click()
+    // Center first: near the page bottom the button can sit under the fixed navbar, and an
+    // unbounded click would hang on actionability for the whole predicate budget.
+    await finish.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+    await finish.click({ timeout: 2000 })
     await expect(page.getByTestId('wird-checklist')).toBeVisible({ timeout: 5000 })
   }).toPass({ timeout: 30_000 })
 }
