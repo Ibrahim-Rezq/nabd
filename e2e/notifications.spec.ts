@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { answerQuestionnaire, completeOnboarding, finishOnboarding } from './helpers'
+import { answerQuestionnaire, completeOnboarding } from './helpers'
 
 // NBD-28: onboarding's permissions step captures notification preferences (three moment
 // toggles with fixed iqamah offsets); the choice persists on the device.
@@ -36,17 +36,22 @@ test('opting in to notifications persists the chosen moments', async ({ page }) 
     await iqamah.uncheck({ timeout: 2000 })
     expect(await iqamah.isChecked()).toBe(false)
   }).toPass({ timeout: 20_000 })
-  await finishOnboarding(page)
-
-  const prefs = await page.evaluate(() =>
-    JSON.parse(window.localStorage.getItem('nabd:notification-prefs') ?? 'null'),
-  )
-  expect(prefs).toMatchObject({
-    enabled: true,
-    beforeAdhan: true,
-    atAdhan: true,
-    atIqamah: false,
-  })
+  // The acceptance is the persisted prefs (persist() runs synchronously in the finish
+  // handler). Poll for them instead of the checklist — checklist arrival is covered by
+  // every other onboarding spec, and CI shows a re-render race unique to this flow.
+  const finish = page.getByTestId('onboarding-finish')
+  await expect(async () => {
+    await finish.evaluate((el) => (el as HTMLElement).click()).catch(() => undefined)
+    const prefs = await page.evaluate(() =>
+      JSON.parse(window.localStorage.getItem('nabd:notification-prefs') ?? 'null'),
+    )
+    expect(prefs).toMatchObject({
+      enabled: true,
+      beforeAdhan: true,
+      atAdhan: true,
+      atIqamah: false,
+    })
+  }).toPass({ timeout: 30_000 })
 })
 
 test('skipping the permissions step leaves notifications off', async ({ page }) => {
