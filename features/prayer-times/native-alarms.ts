@@ -97,6 +97,63 @@ export async function armNativeAlarms(
   }
 }
 
+// --- Debug tooling (NBD-49, r6 §7) — TEMPORARY. Lets the owner confirm the native alarm
+// actually fires (with its adhan sound) without waiting for a real prayer, and inspect what is
+// scheduled. Remove once alarms are verified on-device. ---
+
+// A high, fixed id kept clear of the scheduled prayer-window ids so a test never collides with,
+// or is mistaken for, a real alarm.
+const DEBUG_ALARM_ID = 990_099
+
+export type PendingAlarm = { id: number; title: string; at: string | null }
+
+// Schedules a one-off test notification on the adhan channel at `at` (epoch ms), requesting the
+// notification permission if needed. Returns false on denial/failure so the UI can say so.
+export async function scheduleTestAlarm(at: number): Promise<boolean> {
+  try {
+    let permission = await LocalNotifications.checkPermissions()
+    if (permission.display !== 'granted') {
+      permission = await LocalNotifications.requestPermissions()
+      if (permission.display !== 'granted') return false
+    }
+    await ensureChannels()
+    await LocalNotifications.schedule({
+      notifications: [
+        {
+          id: DEBUG_ALARM_ID,
+          title: 'تجربة الأذان',
+          body: 'إشعار تجريبي للتأكد من عمل المنبّه — يُفترض أن يصدر صوت الأذان.',
+          channelId: ALARM_CHANNELS.adhan.id,
+          schedule: { at: new Date(at), allowWhileIdle: true },
+        },
+      ],
+    })
+    return true
+  } catch (cause) {
+    logger.error('prayer-times.scheduleTestAlarm failed', cause, { at })
+    return false
+  }
+}
+
+// The currently scheduled native alarms (prayer window + any debug test), for the debug panel.
+// Empty on web / failure.
+export async function listPendingAlarms(): Promise<PendingAlarm[]> {
+  try {
+    const pending = await LocalNotifications.getPending()
+    return pending.notifications.map((notification) => {
+      const at = notification.schedule?.at
+      return {
+        id: notification.id,
+        title: notification.title ?? '',
+        at: at ? new Date(at).toISOString() : null,
+      }
+    })
+  } catch (cause) {
+    logger.error('prayer-times.listPendingAlarms failed', cause, {})
+    return []
+  }
+}
+
 // Native notification permission, called from a user gesture (onboarding). Returns the web
 // PermissionState vocabulary so callers stay platform-agnostic.
 export async function requestNativeNotificationPermission(): Promise<'granted' | 'denied'> {
