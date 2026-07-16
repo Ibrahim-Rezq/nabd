@@ -1,4 +1,4 @@
-import { Settings } from 'lucide-react'
+import { Clock, Settings } from 'lucide-react'
 import Link from 'next/link'
 
 import { ThemeToggle } from '@/components/shared/ThemeToggle'
@@ -16,6 +16,14 @@ export default function Home() {
           <h1 className="font-display text-display text-primary">نبض</h1>
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            <Link
+              href="/prayer-times"
+              aria-label="مواقيت الصلاة"
+              data-testid="prayer-times-link"
+              className="border-border bg-surface text-primary shadow-card-sm hover:bg-primary hover:text-on-primary flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors"
+            >
+              <Clock className="size-5" aria-hidden />
+            </Link>
             <Link
               href="/settings"
               aria-label="الإعدادات"
