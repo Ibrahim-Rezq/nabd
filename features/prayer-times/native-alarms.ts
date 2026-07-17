@@ -22,6 +22,11 @@ import { buildAlarmPayloads, notificationMoments } from './logic'
 
 const MS_PER_DAY = 86_400_000
 
+// A high, fixed id kept clear of the scheduled prayer-window ids so a test never collides with,
+// or is mistaken for, a real alarm (NBD-49). Lives up here because armNativeAlarms must spare it
+// when it clears the window — otherwise the 15-minute replan would silently eat a pending test.
+const DEBUG_ALARM_ID = 990_099
+
 let channelsReady = false
 
 async function ensureChannels(): Promise<void> {
@@ -67,10 +72,13 @@ export async function armNativeAlarms(
 
     await ensureChannels()
 
+    // Clear the previous window but spare a pending debug test alarm (NBD-49) — the periodic
+    // replan must not swallow it before it fires.
     const pending = await LocalNotifications.getPending()
-    if (pending.notifications.length > 0) {
+    const stale = pending.notifications.filter((notification) => notification.id !== DEBUG_ALARM_ID)
+    if (stale.length > 0) {
       await LocalNotifications.cancel({
-        notifications: pending.notifications.map((notification) => ({ id: notification.id })),
+        notifications: stale.map((notification) => ({ id: notification.id })),
       })
     }
 
@@ -99,11 +107,8 @@ export async function armNativeAlarms(
 
 // --- Debug tooling (NBD-49, r6 §7) — TEMPORARY. Lets the owner confirm the native alarm
 // actually fires (with its adhan sound) without waiting for a real prayer, and inspect what is
-// scheduled. Remove once alarms are verified on-device. ---
-
-// A high, fixed id kept clear of the scheduled prayer-window ids so a test never collides with,
-// or is mistaken for, a real alarm.
-const DEBUG_ALARM_ID = 990_099
+// scheduled. Remove once alarms are verified on-device (DEBUG_ALARM_ID sits above with the
+// module constants because armNativeAlarms references it). ---
 
 export type PendingAlarm = { id: number; title: string; at: string | null }
 
