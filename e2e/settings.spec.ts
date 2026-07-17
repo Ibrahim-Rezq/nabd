@@ -42,7 +42,8 @@ test('settings expose a location enable control when no location is cached', asy
 
 test('settings mode switcher flips data-mode and persists across reload', async ({ page }) => {
   await page.goto('/')
-  await page.getByTestId('settings-link').click()
+  // الإعدادات is a bottom-nav tab since r6 §2-amendment.
+  await page.getByTestId('nav-settings').click()
   await expect(page).toHaveURL(/\/settings$/)
 
   await expect(page.locator('html')).toHaveAttribute('data-mode', 'classic')

@@ -51,11 +51,11 @@ test('the sub-header stays visible while the prayers accordion is collapsed', as
   await expect(page.getByTestId('prayer-status')).toBeVisible()
 })
 
-// NBD-50 (r6 §2): the dedicated page is reachable from an always-visible home-header icon,
+// NBD-50 (r6 §2, amended): the dedicated page is reachable from its own bottom-nav tab,
 // even before location is granted.
-test('the home header links to the dedicated prayer-times page', async ({ page }) => {
+test('the bottom nav links to the dedicated prayer-times page', async ({ page }) => {
   await page.goto('/')
-  await page.getByTestId('prayer-times-link').click()
+  await page.getByTestId('nav-prayer-times').click()
   await expect(page).toHaveURL(/\/prayer-times$/)
   await expect(page.getByRole('heading', { name: 'مواقيت الصلاة' })).toBeVisible()
 })

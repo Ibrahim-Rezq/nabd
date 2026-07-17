@@ -73,18 +73,20 @@ web preview the button grants location and the times render.
 the bottom nav, and its only door — the status line in `PrayerTimesBar` — appears only once
 location is granted. Give it an always-visible entry point.
 
-**Approach (chosen).** Add a "مواقيت الصلاة" icon link in the **home header**, beside the
-settings gear (`app/page.tsx`), → `/prayer-times`. Keep the existing status-line door. Do **not**
-add a fourth bottom-nav tab — the three-item pill (libraries/home/stats) is a locked design
-element (NBD-33/34) and a fourth item unbalances it.
+**Approach (chosen, superseded — see amendment).** Add a "مواقيت الصلاة" icon link in the
+**home header**, beside the settings gear (`app/page.tsx`), → `/prayer-times`. Keep the existing
+status-line door.
 
-**Alternatives.** (a) Fourth nav tab — rejected, unbalances the pill. (b) A home card — heavier
-than a header icon and competes with the checklist for the fold. Header icon is the lightest
-discoverable option.
+**Amendment (owner decision, post-review).** The header icons were reviewed and reversed: both
+مواقيت الصلاة **and** الإعدادات move into the **bottom nav**, which becomes a **five-item pill**
+(RTL: المكتبات، المواقيت، الرئيسية — center — الإحصائيات، الإعدادات). The home header keeps only
+the theme toggle and the auth chip. The status-line door stays. `/qada` lights الإحصائيات (its
+door is the stats page).
 
-**Files.** `app/page.tsx` (header action), reuse `Clock`/mosque lucide icon + existing tokens.
+**Files.** `components/shared/BottomNav.tsx` (five items), `app/page.tsx` (header cleanup).
 
-**Acceptance.** From home, one tap reaches the prayer-times page without granting location first.
+**Acceptance.** From any page, one bottom-nav tap reaches مواقيت الصلاة and الإعدادات without
+granting location first; home center stays.
 
 ## §3 Adhkar library ↔ home sync for الصباح/المساء (NBD-51)
 
