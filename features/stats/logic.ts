@@ -155,18 +155,14 @@ function longestRun(sequence: boolean[], value: boolean): number {
 }
 
 // Whether an item is due on a day (present in the version in force + scheduled + not treated
-// as voluntary that day). `null` ⇒ N/A (absent/off-schedule), which bridges the streak.
-function itemDueOn(
-  versions: WirdVersion[],
-  item: WirdItem,
-  day: DayId,
-): { due: true; version: WirdItem } | null {
+// as voluntary that day). `false` ⇒ N/A (absent/off-schedule), which bridges the streak.
+function itemDueOn(versions: WirdVersion[], item: WirdItem, day: DayId): boolean {
   const inVersion = versionInForce(versions, day)?.definition.items.find(
     (candidate) => candidate.id === item.id,
   )
-  if (!inVersion || !isScheduledOn(inVersion, day)) return null
-  if (!item.optional && inVersion.optional) return null
-  return { due: true, version: inVersion }
+  if (!inVersion || !isScheduledOn(inVersion, day)) return false
+  if (!item.optional && inVersion.optional) return false
+  return true
 }
 
 type ItemSeries = {

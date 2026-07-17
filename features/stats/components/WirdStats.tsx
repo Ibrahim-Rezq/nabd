@@ -250,7 +250,9 @@ function ItemStatRow({ stat }: { stat: ItemStat }) {
       {stat.optional ? (
         <span className="text-muted-foreground text-small">
           أُدّيت {toArabicIndic(stat.doneDays)} — أطول تتابع {toArabicIndic(stat.longestStreak)}
+          {/* Hidden while the window is empty (deed added mid-week) — «٠/٠» reads as noise. */}
           {stat.attainment &&
+            stat.attainment.window > 0 &&
             ` — أيام الاستهداف ${toArabicIndic(stat.attainment.done)}/${toArabicIndic(
               stat.attainment.window,
             )}`}
