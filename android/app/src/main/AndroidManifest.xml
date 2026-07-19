@@ -22,6 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!-- OAuth deep link (NBD-57, ADR-0013): Supabase redirects sign-in back to
+                 nabd://auth/callback; singleTask routes it into the running app. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="nabd" android:host="auth" />
+            </intent-filter>
+
         </activity>
 
         <provider

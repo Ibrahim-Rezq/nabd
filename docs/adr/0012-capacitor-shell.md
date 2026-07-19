@@ -1,6 +1,6 @@
 # ADR-0012 — Capacitor Android shell (exact prayer alarms)
 
-- **Status:** accepted (owner decision 2026-07-16)
+- **Status:** accepted (owner decision 2026-07-16); §1 superseded by ADR-0013 (bundled static export) — §2–§4 stand
 - **Date:** 2026-07-16
 
 ## Context
