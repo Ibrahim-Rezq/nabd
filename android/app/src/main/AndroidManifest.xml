@@ -50,7 +50,15 @@
     <!-- Prayer alarms (NBD-46): runtime notification permission (Android 13+), exact
          AlarmManager delivery, and location for computing the times. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Exact alarms (NBD-59): USE_EXACT_ALARM is auto-granted and un-revocable — نبض is an
+         alarm-core (azan) app, a permitted use case under Google Play policy. Android 14+
+         denies SCHEDULE_EXACT_ALARM by default for most apps, so USE_EXACT_ALARM is the
+         reliable path; SCHEDULE_EXACT_ALARM stays as the pre-Android-13 fallback. -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <!-- Battery-optimization exemption (NBD-58): asked from a user gesture in onboarding so OEM
+         battery savers don't silence the adhan in the background. Permitted for an alarm app. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

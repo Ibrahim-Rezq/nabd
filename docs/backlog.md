@@ -118,6 +118,18 @@ feature. The APK now bundles a static export; no OTA — every native release is
 | NBD-56 | ✅ done | **Bundled static-export shell** (ADR-0013) — `NEXT_PUBLIC_BUILD_TARGET=native` → `output: 'export'`; `webDir: 'out'`, `server.url` removed; Serwist + update prompt + Analytics off in the native build; `build:native`/`cap:sync` scripts; release checklist doc                 | An APK built via `pnpm cap:sync` cold-starts in airplane mode straight to the wird checklist with data from Dexie; the web build and e2e stay unchanged |
 | NBD-57 | ✅ done | **Native OAuth deep link** — native sign-in opens the system browser (`@capacitor/browser`), Supabase redirects to `nabd://auth/callback` (intent-filter + `@capacitor/app` listener), PKCE singleton client exchanges the code; needs the redirect URL in the Supabase dashboard | Signing in inside the APK returns to the app via the deep link with the account visible in the header; web sign-in path untouched                       |
 
+## R8 — background-alarm reliability & Play Store readiness (2026-07-20 intake)
+
+Research verdict: a prayer/azan app is a legitimate **alarm/reminder app** under Google Play
+policy, so it qualifies for `USE_EXACT_ALARM` and the battery-optimization exemption prompt —
+permissions a generic app is rejected for. Cloud sync already works (native → Supabase directly,
+Dexie→outbox; Vercel is web-only), so no sync work here.
+
+| ID     | Status  | Ticket                                                                                                                                                                                                                                                                             | Acceptance criterion                                                                                                                            |
+| ------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| NBD-58 | ✅ done | **Battery-saver onboarding step** — native-only step after permissions (`@capawesome-team/capacitor-android-battery-optimization` + `lib/impure/battery.ts`, `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`); "تفعيل الحماية" opens the OS exemption dialog; also a settings re-access row | On a battery-saver OEM, after granting the exemption the adhan fires with the app force-stopped; step is hidden on web; skip still finishes     |
+| NBD-59 | 🔜 next | **Play Store readiness** — switch to `USE_EXACT_ALARM` (auto-granted, Android-14 default-deny fix; `SCHEDULE_EXACT_ALARM` kept as fallback) ✅; bump `targetSdk` 34→35 via Capacitor 6→7 upgrade (mandatory since Aug 2025) — owner tasks: signing, dev account, privacy policy    | `aapt dump badging` shows `targetSdkVersion='35'` + `USE_EXACT_ALARM`; a signed AAB builds; native checklist (`docs/release-android.md`) passes |
+
 ## Later (out of scope for MVP)
 
 - Level 4 of the questionnaire / wird difficulty (level 3 ships in NBD-26).

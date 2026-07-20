@@ -13,6 +13,7 @@ dependencies {
     implementation project(':capacitor-browser')
     implementation project(':capacitor-geolocation')
     implementation project(':capacitor-local-notifications')
+    implementation project(':capawesome-team-capacitor-android-battery-optimization')
 
 }
 
